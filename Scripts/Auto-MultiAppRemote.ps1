@@ -1,4 +1,4 @@
-# Auto-MultiAppRemote.ps1 - Instalação Remota de Múltiplos Aplicativos
+# Auto-MultiAppRemote.ps1 - COM DROPBOX
 # Execute com: irm "https://github.com/dMT-ops/deploy-apps/raw/main/Scripts/Auto-MultiAppRemote.ps1" | iex
 
 # CONFIGURAÇÕES GLOBAIS
@@ -6,62 +6,67 @@ $GitHubBase = "https://github.com/dMT-ops/deploy-apps/raw/main"
 $ProgramasDir = "C:\Programas"
 $LogFile = "C:\MultiAppRemote.log"
 
-# CATÁLOGO DE APLICATIVOS
+# CATÁLOGO DE APLICATIVOS COM LINKS DO DROPBOX
 $AppCatalog = @{
     "2xClient" = @{
         Name = "2X Client"
         SetupFile = "2xclient-x64.msi"
         DesktopName = "Instalar2XClient.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/e0yayjuv8anrhkcduh4eb/2xclient-x64.msi?rlkey=oh8p4z0q51bwsm4q0brvufqj3&st=f8b4niaz&raw=1"
     }
     "Java" = @{
         Name = "Java Runtime 8"
         SetupFile = "4-jre-8u231-windows-x64.exe"
         DesktopName = "InstalarJava.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/s380dkxmblogegvapaq7a/4-jre-8u231-windows-x64.exe?rlkey=g6t99dtkh0vd6kz1frzpppsic&st=tw2yl4al&raw=1"
     }
     "Chrome" = @{
         Name = "Google Chrome"
         SetupFile = "5-ChromeSetup.exe"
         DesktopName = "InstalarChrome.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/1ic9uzlqx0b31o8v8x0u9/5-ChromeSetup.exe?rlkey=mqyfv5kufwlm8bj50l7qxd4nt&st=14hp98p8&raw=1"
     }
     "7Zip" = @{
         Name = "7-Zip"
         SetupFile = "7z2401-x64.exe"
         DesktopName = "Instalar7Zip.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/bkcdam1nl6qdq9wq8ig2d/7z2401-x64.exe?rlkey=njlfxjg4uerqkrl0h1pcu63w4&st=e6hb0j7b&raw=1"
     }
     "AnyDesk" = @{
         Name = "AnyDesk"
         SetupFile = "AnyDesk_Diagonal.exe"
         DesktopName = "InstalarAnyDesk.exe"
-    }
-    "FortiClient" = @{
-        Name = "FortiClient VPN"
-        SetupFile = "FortiClientVPN.exe"
-        DesktopName = "InstalarFortiClient.exe"
-    }
-    "NDDPrint" = @{
-        Name = "NDD Print Agent"
-        SetupFile = "nddPrintAgentSetup-x64_5.19.6.exe"
-        DesktopName = "InstalarNDDPrint.exe"
-    }
-    "Office" = @{
-        Name = "Microsoft Office"
-        SetupFile = "OfficeSetup.exe"
-        DesktopName = "InstalarOffice.exe"
-    }
-    "GoTo" = @{
-        Name = "GoTo Meeting"
-        SetupFile = "GoToSetup.exe"
-        DesktopName = "InstalarGoTo.exe"
-    }
-    "FoxitPDF" = @{
-        Name = "Foxit PDF Reader"
-        SetupFile = "FoxitPDFReader20241_L10N_Setup_Prom.exe"
-        DesktopName = "InstalarFoxitPDF.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/zsfr0hc885dl5n3csi15f/AnyDesk_Diagonal.exe?rlkey=tqer40sv7yk3z06hgzrw6mm88&st=1tgzxpk4&raw=1"
     }
     "EPSKit" = @{
         Name = "EPS Kit"
         SetupFile = "epskit_x64.exe"
         DesktopName = "InstalarEPSKit.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/8c9wnhb6vw3w35fx59ut4/epskit_x64.exe?rlkey=2o60nack9ulp6w7wx7egk5v97&st=sli34265&raw=1"
+    }
+    "FortiClient" = @{
+        Name = "FortiClient VPN"
+        SetupFile = "FortiClientVPN.exe"
+        DesktopName = "InstalarFortiClient.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/ntr5321fzoaxvt626sade/FortiClientVPN.exe?rlkey=qqqxhmcsqnsdaidnqpxrtddgm&st=d2wwjse3&raw=1"
+    }
+    "FoxitPDF" = @{
+        Name = "Foxit PDF Reader"
+        SetupFile = "FoxitPDFReader20241_L10N_Setup_Prom.exe"
+        DesktopName = "InstalarFoxitPDF.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/40hmpbmvxfk5wya95r31g/FoxitPDFReader20241_L10N_Setup_Prom.exe?rlkey=qi9188j0s33x4q3cla2asmkb3&st=k3s0k1uw&raw=1"
+    }
+    "NDDPrint" = @{
+        Name = "NDD Print Agent"
+        SetupFile = "nddPrintAgentSetup-x64_5.19.6.exe"
+        DesktopName = "InstalarNDDPrint.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/12enj5qu61fnz09ri4fi7/nddPrintAgentSetup-x64_5.19.6.exe?rlkey=2yswe4295cuyoklpyhdx1t0jw&st=qcvlkfud&raw=1"
+    }
+    "Office" = @{
+        Name = "Microsoft Office"
+        SetupFile = "OfficeSetup.exe"
+        DesktopName = "InstalarOffice.exe"
+        DropboxUrl = "https://www.dropbox.com/scl/fi/c8h5p2w8esubv2oagjxpd/OfficeSetup.exe?rlkey=zhennnelxp1wy9ij1ijiwh57u&st=bl2td3yo&raw=1"
     }
 }
 
@@ -78,6 +83,7 @@ function Show-AppMenu {
     Clear-Host
     Write-Host "===============================================" -ForegroundColor Cyan
     Write-Host "    🚀 DEPLOY-APPS - INSTALADOR REMOTO" -ForegroundColor Cyan
+    Write-Host "          📦 FONTE: DROPBOX" -ForegroundColor Cyan
     Write-Host "===============================================" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "📱 APLICATIVOS DISPONÍVEIS:" -ForegroundColor Yellow
@@ -154,12 +160,12 @@ function Select-Applications {
     }
 }
 
-# FUNÇÃO PARA BAIXAR APLICATIVOS
+# FUNÇÃO PARA BAIXAR APLICATIVOS DO DROPBOX
 function Download-Applications {
     param([array]$SelectedApps)
     
-    Write-Host "📥 Baixando aplicativos selecionados..." -ForegroundColor Yellow
-    Write-Log "Iniciando download de $($SelectedApps.Count) aplicativos"
+    Write-Host "📥 Baixando aplicativos do Dropbox..." -ForegroundColor Yellow
+    Write-Log "Iniciando download de $($SelectedApps.Count) aplicativos do Dropbox"
     
     $downloadResults = @{}
     $successCount = 0
@@ -170,16 +176,33 @@ function Download-Applications {
         
         Write-Host "   📦 $($app.Name)..." -NoNewline -ForegroundColor Gray
         
-        try {
-            Invoke-WebRequest "$GitHubBase/Programas/$($app.SetupFile)" -OutFile $localPath -ErrorAction Stop
-            Write-Host " ✅" -ForegroundColor Green
-            Write-Log "Download concluído: $($app.Name)"
-            $downloadResults[$appKey] = $true
-            $successCount++
-        } catch {
-            Write-Host " ❌" -ForegroundColor Red
-            Write-Host "      Erro: $($_.Exception.Message)" -ForegroundColor Red
-            Write-Log "ERRO no download do $($app.Name): $($_.Exception.Message)"
+        if ($app.DropboxUrl) {
+            try {
+                Write-Log "Tentando download de: $($app.DropboxUrl)"
+                
+                # Usar WebClient para melhor compatibilidade
+                $webClient = New-Object System.Net.WebClient
+                $webClient.DownloadFile($app.DropboxUrl, $localPath)
+                
+                if (Test-Path $localPath) {
+                    Write-Host " ✅" -ForegroundColor Green
+                    Write-Log "Download concluído: $($app.Name)"
+                    $downloadResults[$appKey] = $true
+                    $successCount++
+                } else {
+                    Write-Host " ❌" -ForegroundColor Red
+                    Write-Log "ERRO: Arquivo não foi baixado - $($app.Name)"
+                    $downloadResults[$appKey] = $false
+                }
+            } catch {
+                Write-Host " ❌" -ForegroundColor Red
+                Write-Host "      Erro: $($_.Exception.Message)" -ForegroundColor Red
+                Write-Log "ERRO no download do $($app.Name): $($_.Exception.Message)"
+                $downloadResults[$appKey] = $false
+            }
+        } else {
+            Write-Host " ⚠ (sem link)" -ForegroundColor Yellow
+            Write-Log "AVISO: $($app.Name) não tem link do Dropbox configurado"
             $downloadResults[$appKey] = $false
         }
     }
@@ -195,7 +218,6 @@ function Get-RemoteUserDesktop {
     param([string]$ComputerName)
     
     try {
-        # Tentar via WMI primeiro
         $loggedInUser = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $ComputerName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty UserName
         
         if ($loggedInUser) {
@@ -208,7 +230,6 @@ function Get-RemoteUserDesktop {
             }
         }
         
-        # Fallback: buscar em todas as pastas de usuário
         $usersPath = "\\$ComputerName\C$\Users"
         if (Test-Path $usersPath) {
             $userFolders = Get-ChildItem $usersPath -Directory -ErrorAction SilentlyContinue | Where-Object { 
@@ -381,14 +402,14 @@ function Main {
     try {
         # CRIAR PASTA BASE
         Write-Host "📁 Preparando ambiente local..." -ForegroundColor Yellow
-        Write-Log "Iniciando script DEPLOY-APPS"
+        Write-Log "Iniciando script DEPLOY-APPS com Dropbox"
         New-Item -Path $ProgramasDir -ItemType Directory -Force -ErrorAction Stop | Out-Null
         Write-Host "   ✅ Pasta criada: $ProgramasDir" -ForegroundColor Green
 
         # SELECIONAR APLICATIVOS
         $selectedApps = Select-Applications
         
-        # BAIXAR APLICATIVOS
+        # BAIXAR APLICATIVOS DO DROPBOX
         Write-Host ""
         $downloadResults = Download-Applications -SelectedApps $selectedApps
         
@@ -399,15 +420,15 @@ function Main {
             return
         }
 
-        # CARREGAR MÁQUINAS
+        # CARREGAR MÁQUINAS DO GITHUB
         Write-Host ""
-        Write-Host "📋 Carregando lista de máquinas..." -ForegroundColor Yellow
+        Write-Host "📋 Carregando lista de máquinas do GitHub..." -ForegroundColor Yellow
         try {
             $allComputers = (Invoke-WebRequest "$GitHubBase/Config/maquinas.txt").Content -split "`n" | Where-Object { $_ -and $_.Trim() }
-            Write-Host "   ✅ $($allComputers.Count) máquinas encontradas no arquivo" -ForegroundColor Green
-            Write-Log "Lista de máquinas carregada: $($allComputers.Count) máquinas"
+            Write-Host "   ✅ $($allComputers.Count) máquinas encontradas no GitHub" -ForegroundColor Green
+            Write-Log "Lista de máquinas carregada do GitHub: $($allComputers.Count) máquinas"
         } catch {
-            Write-Host "   ❌ Erro ao carregar lista de máquinas: $($_.Exception.Message)" -ForegroundColor Red
+            Write-Host "   ❌ Erro ao carregar lista de máquinas do GitHub: $($_.Exception.Message)" -ForegroundColor Red
             throw
         }
 
@@ -424,6 +445,8 @@ function Main {
         Write-Host "🚀 PRONTO PARA INICIAR TRANSFERÊNCIA!" -ForegroundColor Cyan
         Write-Host "   📱 Aplicativos: $successfulDownloads selecionados" -ForegroundColor White
         Write-Host "   🌐 Máquinas: $($onlineComputers.Count) online" -ForegroundColor White
+        Write-Host "   📦 Fonte: Dropbox" -ForegroundColor Blue
+        Write-Host "   🔄 Repositório: GitHub" -ForegroundColor Magenta
         Write-Host ""
         Write-Host "💡 Os aplicativos serão copiados para:" -ForegroundColor Yellow
         Write-Host "   📁 C:\Programas\ (pasta na máquina remota)" -ForegroundColor Gray
@@ -481,6 +504,8 @@ function Main {
         Write-Host "   ❌ Falhas: $errorCount" -ForegroundColor Red
         Write-Host "   📴 Offline: $($allComputers.Count - $onlineComputers.Count)" -ForegroundColor Gray
         Write-Host "   📊 Total de máquinas: $($allComputers.Count)" -ForegroundColor White
+        Write-Host "   📦 Fonte dos Apps: Dropbox" -ForegroundColor Blue
+        Write-Host "   🔄 Configuração: GitHub" -ForegroundColor Magenta
 
         Write-Host ""
         Write-Host "🎯 PRÓXIMOS PASSOS:" -ForegroundColor Cyan
