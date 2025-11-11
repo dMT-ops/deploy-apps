@@ -359,7 +359,7 @@ function Transfer-AppsToRemote {
     }
 }
 
-# FUNÇÃO PARA TESTAR CONEXÃO COM MÁQUINAS
+# FUNÇÃO MELHORADA PARA TESTAR CONEXÃO COM MÁQUINAS
 function Test-MachinesConnection {
     param([array]$Computers)
     
@@ -377,7 +377,38 @@ function Test-MachinesConnection {
         $i++
         Write-Host "   [$i/$($Computers.Count)] $computer... " -NoNewline -ForegroundColor Gray
         
+        $isOnline = $false
+        
+        # MÉTODO 1: Test-Connection (ping)
         if (Test-Connection -ComputerName $computer -Count 1 -Quiet -ErrorAction SilentlyContinue) {
+            $isOnline = $true
+        }
+        # MÉTODO 2: Test-WSMan (WinRM - mais confiável)
+        elseif (Test-WSMan -ComputerName $computer -ErrorAction SilentlyContinue) {
+            $isOnline = $true
+        }
+        # MÉTODO 3: Test-Path (compartilhamento administrativo)
+        elseif (Test-Path "\\$computer\C$\" -ErrorAction SilentlyContinue) {
+            $isOnline = $true
+        }
+        # MÉTODO 4: Resolução DNS + porta 445
+        else {
+            try {
+                $ip = [System.Net.Dns]::GetHostAddresses($computer) | Select-Object -First 1
+                if ($ip) {
+                    # Tenta conexão TCP na porta 445 (compartilhamento de arquivos)
+                    $tcpClient = New-Object System.Net.Sockets.TcpClient
+                    if ($tcpClient.ConnectAsync($ip, 445).Wait(1000)) {
+                        $isOnline = $true
+                        $tcpClient.Close()
+                    }
+                }
+            } catch {
+                # Continua offline
+            }
+        }
+        
+        if ($isOnline) {
             Write-Host "✅ ONLINE" -ForegroundColor Green
             $onlineComputers += $computer
             Write-Log "ONLINE: $computer"
@@ -432,7 +463,7 @@ function Main {
             throw
         }
 
-        # TESTAR CONEXÃO COM MÁQUINAS
+        # TESTAR CONEXÃO COM MÁQUINAS (MELHORADA)
         $onlineComputers = Test-MachinesConnection -Computers $allComputers
         
         if ($onlineComputers.Count -eq 0) {
