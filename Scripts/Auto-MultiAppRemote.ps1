@@ -6,77 +6,67 @@ $GitHubBase = "https://github.com/dMT-ops/deploy-apps/raw/main"
 $ProgramasDir = "C:\Programas"
 $LogFile = "C:\MultiAppRemote.log"
 
-# CATÁLOGO DE APLICATIVOS COM LINKS DO DROPBOX E COMANDOS DE INSTALAÇÃO
+# CATÁLOGO DE APLICATIVOS COM LINKS DO DROPBOX
 $AppCatalog = @{
     "2xClient" = @{
         Name = "2X Client"
         SetupFile = "2xclient-x64.msi"
+        DesktopName = "Instalar 2X Client.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/e0yayjuv8anrhkcduh4eb/2xclient-x64.msi?rlkey=oh8p4z0q51bwsm4q0brvufqj3&st=f8b4niaz&raw=1"
-        InstallCommand = "msiexec.exe /i `"C:\Programas\2xclient-x64.msi`" /qn /norestart"
-        ProcessName = "2XClient"
     }
     "Java" = @{
         Name = "Java Runtime 8"
         SetupFile = "4-jre-8u231-windows-x64.exe"
+        DesktopName = "Instalar Java.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/s380dkxmblogegvapaq7a/4-jre-8u231-windows-x64.exe?rlkey=g6t99dtkh0vd6kz1frzpppsic&st=tw2yl4al&raw=1"
-        InstallCommand = "C:\Programas\4-jre-8u231-windows-x64.exe /s"
-        ProcessName = "java.exe"
     }
     "Chrome" = @{
         Name = "Google Chrome"
         SetupFile = "5-ChromeSetup.exe"
+        DesktopName = "Instalar Chrome.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/1ic9uzlqx0b31o8v8x0u9/5-ChromeSetup.exe?rlkey=mqyfv5kufwlm8bj50l7qxd4nt&st=14hp98p8&raw=1"
-        InstallCommand = "C:\Programas\5-ChromeSetup.exe --silent --install"
-        ProcessName = "chrome.exe"
     }
     "7Zip" = @{
         Name = "7-Zip"
         SetupFile = "7z2401-x64.exe"
+        DesktopName = "Instalar 7-Zip.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/bkcdam1nl6qdq9wq8ig2d/7z2401-x64.exe?rlkey=njlfxjg4uerqkrl0h1pcu63w4&st=e6hb0j7b&raw=1"
-        InstallCommand = "C:\Programas\7z2401-x64.exe /S"
-        ProcessName = "7zFM.exe"
     }
     "AnyDesk" = @{
         Name = "AnyDesk"
         SetupFile = "AnyDesk_Diagonal.exe"
+        DesktopName = "Instalar AnyDesk.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/zsfr0hc885dl5n3csi15f/AnyDesk_Diagonal.exe?rlkey=tqer40sv7yk3z06hgzrw6mm88&st=1tgzxpk4&raw=1"
-        InstallCommand = "C:\Programas\AnyDesk_Diagonal.exe --install `"C:\Program Files\AnyDesk`" --silent"
-        ProcessName = "anydesk.exe"
     }
     "EPSKit" = @{
         Name = "EPS Kit"
         SetupFile = "epskit_x64.exe"
+        DesktopName = "Instalar EPS Kit.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/8c9wnhb6vw3w35fx59ut4/epskit_x64.exe?rlkey=2o60nack9ulp6w7wx7egk5v97&st=sli34265&raw=1"
-        InstallCommand = "C:\Programas\epskit_x64.exe /S"
-        ProcessName = "epskit.exe"
     }
     "FortiClient" = @{
         Name = "FortiClient VPN"
         SetupFile = "FortiClientVPN.exe"
+        DesktopName = "Instalar FortiClient.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/ntr5321fzoaxvt626sade/FortiClientVPN.exe?rlkey=qqqxhmcsqnsdaidnqpxrtddgm&st=d2wwjse3&raw=1"
-        InstallCommand = "C:\Programas\FortiClientVPN.exe /quiet"
-        ProcessName = "forticlient.exe"
     }
     "FoxitPDF" = @{
         Name = "Foxit PDF Reader"
         SetupFile = "FoxitPDFReader20241_L10N_Setup_Prom.exe"
+        DesktopName = "Instalar Foxit PDF.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/40hmpbmvxfk5wya95r31g/FoxitPDFReader20241_L10N_Setup_Prom.exe?rlkey=qi9188j0s33x4q3cla2asmkb3&st=k3s0k1uw&raw=1"
-        InstallCommand = "C:\Programas\FoxitPDFReader20241_L10N_Setup_Prom.exe /S"
-        ProcessName = "FoxitPDFReader.exe"
     }
     "NDDPrint" = @{
         Name = "NDD Print Agent"
         SetupFile = "nddPrintAgentSetup-x64_5.19.6.exe"
+        DesktopName = "Instalar NDD Print.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/12enj5qu61fnz09ri4fi7/nddPrintAgentSetup-x64_5.19.6.exe?rlkey=2yswe4295cuyoklpyhdx1t0jw&st=qcvlkfud&raw=1"
-        InstallCommand = "C:\Programas\nddPrintAgentSetup-x64_5.19.6.exe /S"
-        ProcessName = "nddPrint.exe"
     }
     "Office" = @{
         Name = "Microsoft Office"
         SetupFile = "OfficeSetup.exe"
+        DesktopName = "Instalar Office.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/c8h5p2w8esubv2oagjxpd/OfficeSetup.exe?rlkey=zhennnelxp1wy9ij1ijiwh57u&st=bl2td3yo&raw=1"
-        InstallCommand = "C:\Programas\OfficeSetup.exe /quiet"
-        ProcessName = "winword.exe"
     }
 }
 
@@ -223,12 +213,52 @@ function Download-Applications {
     return $downloadResults
 }
 
-# FUNÇÃO PARA INSTALAR APLICATIVOS REMOTAMENTE
-function Install-ApplicationsRemote {
+# FUNÇÃO PARA OBTER DESKTOP DO USUÁRIO
+function Get-RemoteUserDesktop {
+    param([string]$ComputerName)
+    
+    try {
+        $loggedInUser = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $ComputerName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty UserName
+        
+        if ($loggedInUser) {
+            $userName = $loggedInUser.Split('\')[-1]
+            $userDesktopPath = "\\$ComputerName\C$\Users\$userName\Desktop"
+            
+            if (Test-Path $userDesktopPath) {
+                Write-Log "Desktop do usuario encontrado: $userDesktopPath"
+                return $userDesktopPath
+            }
+        }
+        
+        $usersPath = "\\$ComputerName\C$\Users"
+        if (Test-Path $usersPath) {
+            $userFolders = Get-ChildItem $usersPath -Directory -ErrorAction SilentlyContinue | Where-Object { 
+                $_.Name -notin @('Public', 'Default', 'All Users', 'Administrator') -and
+                (Test-Path "$usersPath\$($_.Name)\Desktop" -ErrorAction SilentlyContinue)
+            }
+            
+            foreach ($userFolder in $userFolders) {
+                $desktopPath = "$usersPath\$($userFolder.Name)\Desktop"
+                if (Test-Path $desktopPath) {
+                    Write-Log "Desktop encontrado para usuario: $($userFolder.Name)"
+                    return $desktopPath
+                }
+            }
+        }
+        
+        return $null
+    } catch {
+        Write-Log "ERRO ao buscar Desktop em $ComputerName"
+        return $null
+    }
+}
+
+# FUNÇÃO PARA TRANSFERIR APLICATIVOS PARA MÁQUINAS REMOTAS
+function Transfer-AppsToRemote {
     param([string]$ComputerName, [array]$SelectedApps, [hashtable]$DownloadResults)
     
     try {
-        Write-Log "Iniciando instalacao em: $ComputerName"
+        Write-Log "Iniciando transferencia para: $ComputerName"
         
         # Criar pasta Programas na máquina remota
         $remoteProgramasDir = "\\$ComputerName\C$\Programas"
@@ -244,7 +274,7 @@ function Install-ApplicationsRemote {
         }
         
         # Copiar aplicativos para Programas
-        $appsCopied = 0
+        $programasCopied = 0
         foreach ($appKey in $SelectedApps) {
             if (-not $DownloadResults[$appKey]) { continue }
             
@@ -254,63 +284,77 @@ function Install-ApplicationsRemote {
             
             try {
                 Copy-Item $sourcePath $destPath -Force -ErrorAction Stop
-                $appsCopied++
+                $programasCopied++
             } catch {
                 Write-Log "AVISO: Nao foi possivel copiar $($app.Name) para Programas em $ComputerName"
             }
         }
         
-        if ($appsCopied -eq 0) {
-            Write-Host "      Nenhum app copiado" -ForegroundColor Red
-            return $false
-        }
+        # Copiar para Desktop do usuário
+        Write-Host "      Copiando para Area de Trabalho..." -NoNewline -ForegroundColor Gray
+        $desktopCopied = 0
+        $userDesktopPath = Get-RemoteUserDesktop -ComputerName $ComputerName
         
-        # INSTALAR APLICATIVOS
-        Write-Host "      Instalando aplicativos..." -ForegroundColor Yellow
-        $installedCount = 0
-        
-        foreach ($appKey in $SelectedApps) {
-            if (-not $DownloadResults[$appKey]) { continue }
-            
-            $app = $AppCatalog[$appKey]
-            Write-Host "         $($app.Name)..." -NoNewline -ForegroundColor Gray
-            
-            try {
-                # Executar comando de instalação silenciosa remotamente
-                $result = Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList $app.InstallCommand -ComputerName $ComputerName -ErrorAction Stop
+        if ($userDesktopPath -and (Test-Path $userDesktopPath)) {
+            foreach ($appKey in $SelectedApps) {
+                if (-not $DownloadResults[$appKey]) { continue }
                 
-                if ($result.ReturnValue -eq 0) {
-                    Write-Host " CONCLUIDO" -ForegroundColor Green
-                    Write-Log "Instalacao iniciada: $($app.Name) em $ComputerName"
-                    $installedCount++
-                    
-                    # Aguardar um pouco entre instalações
-                    Start-Sleep -Seconds 3
-                } else {
-                    Write-Host " ERRO" -ForegroundColor Red
-                    Write-Log "ERRO na instalacao: $($app.Name) em $ComputerName"
+                $app = $AppCatalog[$appKey]
+                $sourcePath = "$ProgramasDir\$($app.SetupFile)"
+                $destPath = "$userDesktopPath\$($app.DesktopName)"
+                
+                try {
+                    Copy-Item $sourcePath $destPath -Force -ErrorAction SilentlyContinue
+                    if (Test-Path $destPath) {
+                        $desktopCopied++
+                    }
+                } catch {
+                    # Ignora erros individuais de cópia
                 }
-            } catch {
-                Write-Host " ERRO" -ForegroundColor Red
-                Write-Host "            Falha na instalacao" -ForegroundColor Red
-                Write-Log "ERRO na instalacao: $($app.Name) em $ComputerName"
             }
         }
         
-        Write-Host "      Instalacoes concluidas: $installedCount/$appsCopied" -ForegroundColor $(if ($installedCount -eq $appsCopied) { "Green" } else { "Yellow" })
+        # Fallback para Desktop público
+        if ($desktopCopied -eq 0) {
+            $publicDesktop = "\\$ComputerName\C$\Users\Public\Desktop"
+            if (Test-Path $publicDesktop) {
+                foreach ($appKey in $SelectedApps) {
+                    if (-not $DownloadResults[$appKey]) { continue }
+                    
+                    $app = $AppCatalog[$appKey]
+                    $sourcePath = "$ProgramasDir\$($app.SetupFile)"
+                    $destPath = "$publicDesktop\$($app.DesktopName)"
+                    
+                    try {
+                        Copy-Item $sourcePath $destPath -Force -ErrorAction SilentlyContinue
+                        if (Test-Path $destPath) {
+                            $desktopCopied++
+                        }
+                    } catch {
+                        # Ignora erros individuais de cópia
+                    }
+                }
+            }
+        }
         
-        # Considerar sucesso se pelo menos uma instalação foi iniciada
-        if ($installedCount -gt 0) {
-            Write-Log "SUCESSO: $installedCount apps instalados em $ComputerName"
+        if ($desktopCopied -gt 0) {
+            Write-Host " CONCLUIDO ($desktopCopied apps)" -ForegroundColor Green
+        } else {
+            Write-Host " APENAS PROGRAMAS" -ForegroundColor Yellow
+        }
+        
+        # Considerar sucesso se pelo menos um arquivo foi copiado para Programas
+        if ($programasCopied -gt 0) {
+            Write-Log "SUCESSO: $programasCopied apps transferidos para $ComputerName"
             return $true
         } else {
-            Write-Log "FALHA: Nenhum app instalado em $ComputerName"
+            Write-Log "FALHA: Nenhum app transferido para $ComputerName"
             return $false
         }
         
     } catch {
         Write-Host " ERRO" -ForegroundColor Red
-        Write-Log "ERRO na instalacao em $ComputerName"
+        Write-Log "ERRO na transferencia para $ComputerName"
         return $false
     }
 }
@@ -427,30 +471,30 @@ function Main {
             return
         }
 
-        # CONFIRMAR INÍCIO DA INSTALAÇÃO
+        # CONFIRMAR INÍCIO DA TRANSFERÊNCIA
         Write-Host ""
-        Write-Host "PRONTO PARA INICIAR INSTALACAO AUTOMATICA!" -ForegroundColor Cyan
+        Write-Host "PRONTO PARA INICIAR TRANSFERENCIA!" -ForegroundColor Cyan
         Write-Host "   Aplicativos: $successfulDownloads selecionados" -ForegroundColor White
         Write-Host "   Maquinas: $($onlineComputers.Count) online" -ForegroundColor White
         Write-Host "   Fonte: Dropbox" -ForegroundColor Blue
         Write-Host "   Repositorio: GitHub" -ForegroundColor Magenta
         Write-Host ""
-        Write-Host "Os aplicativos serao:" -ForegroundColor Yellow
-        Write-Host "   Copiados para C:\Programas\" -ForegroundColor Gray
-        Write-Host "   INSTALADOS AUTOMATICAMENTE (silenciosamente)" -ForegroundColor Green
-        Write-Host "   Nao e necessario acao do usuario" -ForegroundColor Cyan
+        Write-Host "Os aplicativos serao copiados para:" -ForegroundColor Yellow
+        Write-Host "   C:\Programas\ (pasta na maquina remota)" -ForegroundColor Gray
+        Write-Host "   Area de Trabalho (como 'Instalar [NomeApp].exe')" -ForegroundColor Gray
+        Write-Host "   Usuario deve executar manualmente" -ForegroundColor Cyan
         Write-Host ""
         
-        $confirm = Read-Host "Iniciar instalacao automatica? (S/N)"
+        $confirm = Read-Host "Iniciar transferencia? (S/N)"
         if ($confirm -notmatch '^[Ss]$') {
-            Write-Host "Instalacao cancelada pelo usuario" -ForegroundColor Yellow
+            Write-Host "Transferencia cancelada pelo usuario" -ForegroundColor Yellow
             return
         }
 
-        # INICIAR INSTALAÇÃO
+        # INICIAR TRANSFERÊNCIA
         Write-Host ""
-        Write-Host "INICIANDO INSTALACAO REMOTA AUTOMATICA..." -ForegroundColor Cyan
-        Write-Log "Iniciando instalacao automatica para $($onlineComputers.Count) maquinas online"
+        Write-Host "INICIANDO TRANSFERENCIA REMOTA..." -ForegroundColor Cyan
+        Write-Log "Iniciando transferencia para $($onlineComputers.Count) maquinas online"
         
         $successCount = 0
         $errorCount = 0
@@ -461,13 +505,13 @@ function Main {
             Write-Host ""
             Write-Host "[$i/$($onlineComputers.Count)] $computer" -ForegroundColor Yellow
             
-            $installResult = Install-ApplicationsRemote -ComputerName $computer -SelectedApps $selectedApps -DownloadResults $downloadResults
+            $transferResult = Transfer-AppsToRemote -ComputerName $computer -SelectedApps $selectedApps -DownloadResults $downloadResults
             
-            if ($installResult) {
-                Write-Host "   INSTALACAO CONCLUIDA" -ForegroundColor Green
+            if ($transferResult) {
+                Write-Host "   TRANSFERENCIA CONCLUIDA" -ForegroundColor Green
                 $successCount++
             } else {
-                Write-Host "   FALHA NA INSTALACAO" -ForegroundColor Red
+                Write-Host "   FALHA NA TRANSFERENCIA" -ForegroundColor Red
                 $errorCount++
             }
         }
@@ -478,7 +522,7 @@ function Main {
         Write-Host "           RESUMO FINAL - DEPLOY-APPS" -ForegroundColor Cyan
         Write-Host "===============================================" -ForegroundColor Cyan
         
-        Write-Host "APLICATIVOS INSTALADOS:" -ForegroundColor Yellow
+        Write-Host "APLICATIVOS TRANSFERIDOS:" -ForegroundColor Yellow
         foreach ($appKey in $selectedApps) {
             if ($downloadResults[$appKey]) {
                 $app = $AppCatalog[$appKey]
@@ -487,7 +531,7 @@ function Main {
         }
         
         Write-Host ""
-        Write-Host "INSTALACAO REMOTA:" -ForegroundColor Yellow
+        Write-Host "TRANSFERENCIA REMOTA:" -ForegroundColor Yellow
         Write-Host "   Sucesso: $successCount" -ForegroundColor Green
         Write-Host "   Falhas: $errorCount" -ForegroundColor Red
         Write-Host "   Offline: $($allComputers.Count - $onlineComputers.Count)" -ForegroundColor Gray
@@ -496,11 +540,10 @@ function Main {
         Write-Host "   Configuracao: GitHub" -ForegroundColor Magenta
 
         Write-Host ""
-        Write-Host "INSTALACAO CONCLUIDA:" -ForegroundColor Cyan
-        Write-Host "   1. Aplicativos copiados para C:\Programas\" -ForegroundColor White
-        Write-Host "   2. Instalacao automatica e silenciosa executada" -ForegroundColor White
-        Write-Host "   3. Os aplicativos estao PRONTOS PARA USO" -ForegroundColor Green
-        Write-Host "   4. Nenhuma acao adicional necessaria" -ForegroundColor White
+        Write-Host "PROXIMOS PASSOS:" -ForegroundColor Cyan
+        Write-Host "   1. Os instaladores estao na Area de Trabalho das maquinas" -ForegroundColor White
+        Write-Host "   2. Usuarios devem executar os arquivos 'Instalar [NomeApp].exe'" -ForegroundColor White
+        Write-Host "   3. A instalacao e silenciosa e automatica" -ForegroundColor White
         Write-Host ""
         Write-Host "Log detalhado: $LogFile" -ForegroundColor Gray
 
