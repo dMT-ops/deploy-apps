@@ -75,7 +75,7 @@ $AppCatalog = @{
         Name = "Microsoft Office"
         SetupFile = "OfficeSetup.exe"
         DropboxUrl = "https://www.dropbox.com/scl/fi/c8h5p2w8esubv2oagjxpd/OfficeSetup.exe?rlkey=zhennnelxp1wy9ij1ijiwh57u&st=bl2td3yo&raw=1"
-        InstallCommand = "C:\Programas\OfficeSetup.exe /configure configuration.xml"
+        InstallCommand = "C:\Programas\OfficeSetup.exe /quiet"
         ProcessName = "winword.exe"
     }
 }
@@ -92,11 +92,11 @@ function Write-Log {
 function Show-AppMenu {
     Clear-Host
     Write-Host "===============================================" -ForegroundColor Cyan
-    Write-Host "    🚀 DEPLOY-APPS - INSTALADOR REMOTO" -ForegroundColor Cyan
-    Write-Host "          📦 FONTE: DROPBOX" -ForegroundColor Cyan
+    Write-Host "    DEPLOY-APPS - INSTALADOR REMOTO" -ForegroundColor Cyan
+    Write-Host "          FONTE: DROPBOX" -ForegroundColor Cyan
     Write-Host "===============================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "📱 APLICATIVOS DISPONÍVEIS:" -ForegroundColor Yellow
+    Write-Host "APLICATIVOS DISPONIVEIS:" -ForegroundColor Yellow
     Write-Host ""
     
     $i = 1
@@ -124,7 +124,7 @@ function Select-Applications {
         $choice = Read-Host "`nSelecione os aplicativos (ex: 1, 1-3, A para todos)"
         
         if ($choice -eq 'A' -or $choice -eq 'a') {
-            Write-Log "Usuário selecionou: TODOS os aplicativos"
+            Write-Log "Usuario selecionou: TODOS os aplicativos"
             return $AppCatalog.Keys
         }
         
@@ -154,18 +154,18 @@ function Select-Applications {
         $selectedApps = $selectedApps | Select-Object -Unique
         
         if ($selectedApps.Count -gt 0) {
-            Write-Host "`n✅ Aplicativos selecionados:" -ForegroundColor Green
+            Write-Host "`nAPLICATIVOS SELECIONADOS:" -ForegroundColor Green
             foreach ($appKey in $selectedApps) {
                 Write-Host "   • $($AppCatalog[$appKey].Name)" -ForegroundColor White
             }
             
-            $confirm = Read-Host "`nConfirmar seleção? (S/N)"
+            $confirm = Read-Host "`nConfirmar selecao? (S/N)"
             if ($confirm -match '^[Ss]$') {
                 Write-Log "Aplicativos selecionados: $($selectedApps -join ', ')"
                 return $selectedApps
             }
         } else {
-            Write-Host "❌ Seleção inválida. Tente novamente." -ForegroundColor Red
+            Write-Host "Selecao invalida. Tente novamente." -ForegroundColor Red
         }
     }
 }
@@ -174,7 +174,7 @@ function Select-Applications {
 function Download-Applications {
     param([array]$SelectedApps)
     
-    Write-Host "📥 Baixando aplicativos do Dropbox..." -ForegroundColor Yellow
+    Write-Host "Baixando aplicativos do Dropbox..." -ForegroundColor Yellow
     Write-Log "Iniciando download de $($SelectedApps.Count) aplicativos do Dropbox"
     
     $downloadResults = @{}
@@ -184,7 +184,7 @@ function Download-Applications {
         $app = $AppCatalog[$appKey]
         $localPath = "$ProgramasDir\$($app.SetupFile)"
         
-        Write-Host "   📦 $($app.Name)..." -NoNewline -ForegroundColor Gray
+        Write-Host "   $($app.Name)..." -NoNewline -ForegroundColor Gray
         
         if ($app.DropboxUrl) {
             try {
@@ -195,30 +195,30 @@ function Download-Applications {
                 $webClient.DownloadFile($app.DropboxUrl, $localPath)
                 
                 if (Test-Path $localPath) {
-                    Write-Host " ✅" -ForegroundColor Green
-                    Write-Log "Download concluído: $($app.Name)"
+                    Write-Host " CONCLUIDO" -ForegroundColor Green
+                    Write-Log "Download concluido: $($app.Name)"
                     $downloadResults[$appKey] = $true
                     $successCount++
                 } else {
-                    Write-Host " ❌" -ForegroundColor Red
-                    Write-Log "ERRO: Arquivo não foi baixado - $($app.Name)"
+                    Write-Host " ERRO" -ForegroundColor Red
+                    Write-Log "ERRO: Arquivo nao foi baixado - $($app.Name)"
                     $downloadResults[$appKey] = $false
                 }
             } catch {
-                Write-Host " ❌" -ForegroundColor Red
+                Write-Host " ERRO" -ForegroundColor Red
                 Write-Host "      Erro: $($_.Exception.Message)" -ForegroundColor Red
                 Write-Log "ERRO no download do $($app.Name): $($_.Exception.Message)"
                 $downloadResults[$appKey] = $false
             }
         } else {
-            Write-Host " ⚠ (sem link)" -ForegroundColor Yellow
-            Write-Log "AVISO: $($app.Name) não tem link do Dropbox configurado"
+            Write-Host " SEM LINK" -ForegroundColor Yellow
+            Write-Log "AVISO: $($app.Name) nao tem link do Dropbox configurado"
             $downloadResults[$appKey] = $false
         }
     }
     
     Write-Host ""
-    Write-Host "📊 Download concluído: $successCount/$($SelectedApps.Count) aplicativos baixados" -ForegroundColor $(if ($successCount -eq $SelectedApps.Count) { "Green" } else { "Yellow" })
+    Write-Host "Download concluido: $successCount/$($SelectedApps.Count) aplicativos baixados" -ForegroundColor $(if ($successCount -eq $SelectedApps.Count) { "Green" } else { "Yellow" })
     
     return $downloadResults
 }
@@ -228,18 +228,18 @@ function Install-ApplicationsRemote {
     param([string]$ComputerName, [array]$SelectedApps, [hashtable]$DownloadResults)
     
     try {
-        Write-Log "Iniciando instalação em: $ComputerName"
+        Write-Log "Iniciando instalacao em: $ComputerName"
         
         # Criar pasta Programas na máquina remota
         $remoteProgramasDir = "\\$ComputerName\C$\Programas"
-        Write-Host "      📁 Criando pasta Programas..." -NoNewline -ForegroundColor Gray
+        Write-Host "      Criando pasta Programas..." -NoNewline -ForegroundColor Gray
         
         try {
             New-Item -Path $remoteProgramasDir -ItemType Directory -Force -ErrorAction Stop | Out-Null
-            Write-Host " ✅" -ForegroundColor Green
+            Write-Host " CONCLUIDO" -ForegroundColor Green
         } catch {
-            Write-Host " ❌" -ForegroundColor Red
-            Write-Log "ERRO: Não foi possível criar pasta Programas em $ComputerName"
+            Write-Host " ERRO" -ForegroundColor Red
+            Write-Log "ERRO: Nao foi possivel criar pasta Programas em $ComputerName"
             return $false
         }
         
@@ -256,17 +256,17 @@ function Install-ApplicationsRemote {
                 Copy-Item $sourcePath $destPath -Force -ErrorAction Stop
                 $appsCopied++
             } catch {
-                Write-Log "AVISO: Não foi possível copiar $($app.Name) para Programas em $ComputerName"
+                Write-Log "AVISO: Nao foi possivel copiar $($app.Name) para Programas em $ComputerName"
             }
         }
         
         if ($appsCopied -eq 0) {
-            Write-Host "      ❌ Nenhum app copiado" -ForegroundColor Red
+            Write-Host "      Nenhum app copiado" -ForegroundColor Red
             return $false
         }
         
         # INSTALAR APLICATIVOS
-        Write-Host "      🔧 Instalando aplicativos..." -ForegroundColor Yellow
+        Write-Host "      Instalando aplicativos..." -ForegroundColor Yellow
         $installedCount = 0
         
         foreach ($appKey in $SelectedApps) {
@@ -280,24 +280,24 @@ function Install-ApplicationsRemote {
                 $result = Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList $app.InstallCommand -ComputerName $ComputerName -ErrorAction Stop
                 
                 if ($result.ReturnValue -eq 0) {
-                    Write-Host " ✅" -ForegroundColor Green
-                    Write-Log "Instalação iniciada: $($app.Name) em $ComputerName"
+                    Write-Host " CONCLUIDO" -ForegroundColor Green
+                    Write-Log "Instalacao iniciada: $($app.Name) em $ComputerName"
                     $installedCount++
                     
                     # Aguardar um pouco entre instalações
                     Start-Sleep -Seconds 3
                 } else {
-                    Write-Host " ❌" -ForegroundColor Red
-                    Write-Log "ERRO na instalação do $($app.Name) em $ComputerName - Código: $($result.ReturnValue)"
+                    Write-Host " ERRO" -ForegroundColor Red
+                    Write-Log "ERRO na instalacao do $($app.Name) em $ComputerName - Codigo: $($result.ReturnValue)"
                 }
             } catch {
-                Write-Host " ❌" -ForegroundColor Red
+                Write-Host " ERRO" -ForegroundColor Red
                 Write-Host "            Erro: $($_.Exception.Message)" -ForegroundColor Red
-                Write-Log "ERRO na instalação do $($app.Name) em $ComputerName: $($_.Exception.Message)"
+                Write-Log "ERRO na instalacao do $($app.Name) em $ComputerName: $($_.Exception.Message)"
             }
         }
         
-        Write-Host "      📊 Instalações concluídas: $installedCount/$appsCopied" -ForegroundColor $(if ($installedCount -eq $appsCopied) { "Green" } else { "Yellow" })
+        Write-Host "      Instalacoes concluidas: $installedCount/$appsCopied" -ForegroundColor $(if ($installedCount -eq $appsCopied) { "Green" } else { "Yellow" })
         
         # Considerar sucesso se pelo menos uma instalação foi iniciada
         if ($installedCount -gt 0) {
@@ -309,8 +309,8 @@ function Install-ApplicationsRemote {
         }
         
     } catch {
-        Write-Host " ❌" -ForegroundColor Red
-        Write-Log "ERRO na instalação em $ComputerName : $($_.Exception.Message)"
+        Write-Host " ERRO" -ForegroundColor Red
+        Write-Log "ERRO na instalacao em $ComputerName : $($_.Exception.Message)"
         return $false
     }
 }
@@ -319,8 +319,8 @@ function Install-ApplicationsRemote {
 function Test-MachinesConnection {
     param([array]$Computers)
     
-    Write-Host "🔍 Verificando máquinas online..." -ForegroundColor Yellow
-    Write-Log "Iniciando teste de conexão com $($Computers.Count) máquinas"
+    Write-Host "Verificando maquinas online..." -ForegroundColor Yellow
+    Write-Log "Iniciando teste de conexao com $($Computers.Count) maquinas"
     
     $onlineComputers = @()
     $offlineComputers = @()
@@ -365,20 +365,20 @@ function Test-MachinesConnection {
         }
         
         if ($isOnline) {
-            Write-Host "✅ ONLINE" -ForegroundColor Green
+            Write-Host "ONLINE" -ForegroundColor Green
             $onlineComputers += $computer
             Write-Log "ONLINE: $computer"
         } else {
-            Write-Host "📴 OFFLINE" -ForegroundColor Red
+            Write-Host "OFFLINE" -ForegroundColor Red
             $offlineComputers += $computer
             Write-Log "OFFLINE: $computer"
         }
     }
     
     Write-Host ""
-    Write-Host "📊 Resultado do scan:" -ForegroundColor Cyan
-    Write-Host "   ✅ Online: $($onlineComputers.Count)" -ForegroundColor Green
-    Write-Host "   📴 Offline: $($offlineComputers.Count)" -ForegroundColor Red
+    Write-Host "Resultado do scan:" -ForegroundColor Cyan
+    Write-Host "   Online: $($onlineComputers.Count)" -ForegroundColor Green
+    Write-Host "   Offline: $($offlineComputers.Count)" -ForegroundColor Red
     Write-Host ""
     
     return $onlineComputers
@@ -388,10 +388,10 @@ function Test-MachinesConnection {
 function Main {
     try {
         # CRIAR PASTA BASE
-        Write-Host "📁 Preparando ambiente local..." -ForegroundColor Yellow
+        Write-Host "Preparando ambiente local..." -ForegroundColor Yellow
         Write-Log "Iniciando script DEPLOY-APPS com Dropbox"
         New-Item -Path $ProgramasDir -ItemType Directory -Force -ErrorAction Stop | Out-Null
-        Write-Host "   ✅ Pasta criada: $ProgramasDir" -ForegroundColor Green
+        Write-Host "   Pasta criada: $ProgramasDir" -ForegroundColor Green
 
         # SELECIONAR APLICATIVOS
         $selectedApps = Select-Applications
@@ -403,19 +403,19 @@ function Main {
         # VERIFICAR SE HOUVE SUCESSO NOS DOWNLOADS
         $successfulDownloads = ($downloadResults.GetEnumerator() | Where-Object { $_.Value }).Count
         if ($successfulDownloads -eq 0) {
-            Write-Host "❌ Nenhum aplicativo foi baixado com sucesso. Abortando." -ForegroundColor Red
+            Write-Host "Nenhum aplicativo foi baixado com sucesso. Abortando." -ForegroundColor Red
             return
         }
 
         # CARREGAR MÁQUINAS DO GITHUB
         Write-Host ""
-        Write-Host "📋 Carregando lista de máquinas do GitHub..." -ForegroundColor Yellow
+        Write-Host "Carregando lista de maquinas do GitHub..." -ForegroundColor Yellow
         try {
             $allComputers = (Invoke-WebRequest "$GitHubBase/Config/maquinas.txt").Content -split "`n" | Where-Object { $_ -and $_.Trim() }
-            Write-Host "   ✅ $($allComputers.Count) máquinas encontradas no GitHub" -ForegroundColor Green
-            Write-Log "Lista de máquinas carregada do GitHub: $($allComputers.Count) máquinas"
+            Write-Host "   $($allComputers.Count) maquinas encontradas no GitHub" -ForegroundColor Green
+            Write-Log "Lista de maquinas carregada do GitHub: $($allComputers.Count) maquinas"
         } catch {
-            Write-Host "   ❌ Erro ao carregar lista de máquinas do GitHub: $($_.Exception.Message)" -ForegroundColor Red
+            Write-Host "   Erro ao carregar lista de maquinas do GitHub: $($_.Exception.Message)" -ForegroundColor Red
             throw
         }
 
@@ -423,34 +423,34 @@ function Main {
         $onlineComputers = Test-MachinesConnection -Computers $allComputers
         
         if ($onlineComputers.Count -eq 0) {
-            Write-Host "❌ Nenhuma máquina online encontrada. Abortando." -ForegroundColor Red
+            Write-Host "Nenhuma maquina online encontrada. Abortando." -ForegroundColor Red
             return
         }
 
         # CONFIRMAR INÍCIO DA INSTALAÇÃO
         Write-Host ""
-        Write-Host "🚀 PRONTO PARA INICIAR INSTALAÇÃO AUTOMÁTICA!" -ForegroundColor Cyan
-        Write-Host "   📱 Aplicativos: $successfulDownloads selecionados" -ForegroundColor White
-        Write-Host "   🌐 Máquinas: $($onlineComputers.Count) online" -ForegroundColor White
-        Write-Host "   📦 Fonte: Dropbox" -ForegroundColor Blue
-        Write-Host "   🔄 Repositório: GitHub" -ForegroundColor Magenta
+        Write-Host "PRONTO PARA INICIAR INSTALACAO AUTOMATICA!" -ForegroundColor Cyan
+        Write-Host "   Aplicativos: $successfulDownloads selecionados" -ForegroundColor White
+        Write-Host "   Maquinas: $($onlineComputers.Count) online" -ForegroundColor White
+        Write-Host "   Fonte: Dropbox" -ForegroundColor Blue
+        Write-Host "   Repositorio: GitHub" -ForegroundColor Magenta
         Write-Host ""
-        Write-Host "💡 Os aplicativos serão:" -ForegroundColor Yellow
-        Write-Host "   📁 Copiados para C:\Programas\" -ForegroundColor Gray
-        Write-Host "   🔧 INSTALADOS AUTOMATICAMENTE (silenciosamente)" -ForegroundColor Green
-        Write-Host "   ⚠ Não é necessário ação do usuário" -ForegroundColor Cyan
+        Write-Host "Os aplicativos serao:" -ForegroundColor Yellow
+        Write-Host "   Copiados para C:\Programas\" -ForegroundColor Gray
+        Write-Host "   INSTALADOS AUTOMATICAMENTE (silenciosamente)" -ForegroundColor Green
+        Write-Host "   Nao e necessario acao do usuario" -ForegroundColor Cyan
         Write-Host ""
         
-        $confirm = Read-Host "Iniciar instalação automática? (S/N)"
+        $confirm = Read-Host "Iniciar instalacao automatica? (S/N)"
         if ($confirm -notmatch '^[Ss]$') {
-            Write-Host "Instalação cancelada pelo usuário" -ForegroundColor Yellow
+            Write-Host "Instalacao cancelada pelo usuario" -ForegroundColor Yellow
             return
         }
 
         # INICIAR INSTALAÇÃO
         Write-Host ""
-        Write-Host "🔧 INICIANDO INSTALAÇÃO REMOTA AUTOMÁTICA..." -ForegroundColor Cyan
-        Write-Log "Iniciando instalação automática para $($onlineComputers.Count) máquinas online"
+        Write-Host "INICIANDO INSTALACAO REMOTA AUTOMATICA..." -ForegroundColor Cyan
+        Write-Log "Iniciando instalacao automatica para $($onlineComputers.Count) maquinas online"
         
         $successCount = 0
         $errorCount = 0
@@ -459,15 +459,15 @@ function Main {
         foreach ($computer in $onlineComputers) {
             $i++
             Write-Host ""
-            Write-Host "[$i/$($onlineComputers.Count)] ⚡ $computer" -ForegroundColor Yellow
+            Write-Host "[$i/$($onlineComputers.Count)] $computer" -ForegroundColor Yellow
             
             $installResult = Install-ApplicationsRemote -ComputerName $computer -SelectedApps $selectedApps -DownloadResults $downloadResults
             
             if ($installResult) {
-                Write-Host "   ✅ INSTALAÇÃO CONCLUÍDA" -ForegroundColor Green
+                Write-Host "   INSTALACAO CONCLUIDA" -ForegroundColor Green
                 $successCount++
             } else {
-                Write-Host "   ❌ FALHA NA INSTALAÇÃO" -ForegroundColor Red
+                Write-Host "   FALHA NA INSTALACAO" -ForegroundColor Red
                 $errorCount++
             }
         }
@@ -475,39 +475,39 @@ function Main {
         # RESUMO FINAL
         Write-Host ""
         Write-Host "===============================================" -ForegroundColor Cyan
-        Write-Host "           📊 RESUMO FINAL - DEPLOY-APPS" -ForegroundColor Cyan
+        Write-Host "           RESUMO FINAL - DEPLOY-APPS" -ForegroundColor Cyan
         Write-Host "===============================================" -ForegroundColor Cyan
         
-        Write-Host "📱 APLICATIVOS INSTALADOS:" -ForegroundColor Yellow
+        Write-Host "APLICATIVOS INSTALADOS:" -ForegroundColor Yellow
         foreach ($appKey in $selectedApps) {
             if ($downloadResults[$appKey]) {
                 $app = $AppCatalog[$appKey]
-                Write-Host "   ✅ $($app.Name)" -ForegroundColor Green
+                Write-Host "   $($app.Name)" -ForegroundColor Green
             }
         }
         
         Write-Host ""
-        Write-Host "🌐 INSTALAÇÃO REMOTA:" -ForegroundColor Yellow
-        Write-Host "   ✅ Sucesso: $successCount" -ForegroundColor Green
-        Write-Host "   ❌ Falhas: $errorCount" -ForegroundColor Red
-        Write-Host "   📴 Offline: $($allComputers.Count - $onlineComputers.Count)" -ForegroundColor Gray
-        Write-Host "   📊 Total de máquinas: $($allComputers.Count)" -ForegroundColor White
-        Write-Host "   📦 Fonte dos Apps: Dropbox" -ForegroundColor Blue
-        Write-Host "   🔄 Configuração: GitHub" -ForegroundColor Magenta
+        Write-Host "INSTALACAO REMOTA:" -ForegroundColor Yellow
+        Write-Host "   Sucesso: $successCount" -ForegroundColor Green
+        Write-Host "   Falhas: $errorCount" -ForegroundColor Red
+        Write-Host "   Offline: $($allComputers.Count - $onlineComputers.Count)" -ForegroundColor Gray
+        Write-Host "   Total de maquinas: $($allComputers.Count)" -ForegroundColor White
+        Write-Host "   Fonte dos Apps: Dropbox" -ForegroundColor Blue
+        Write-Host "   Configuracao: GitHub" -ForegroundColor Magenta
 
         Write-Host ""
-        Write-Host "🎯 INSTALAÇÃO CONCLUÍDA:" -ForegroundColor Cyan
+        Write-Host "INSTALACAO CONCLUIDA:" -ForegroundColor Cyan
         Write-Host "   1. Aplicativos copiados para C:\Programas\" -ForegroundColor White
-        Write-Host "   2. Instalação automática e silenciosa executada" -ForegroundColor White
-        Write-Host "   3. Os aplicativos estão PRONTOS PARA USO" -ForegroundColor Green
-        Write-Host "   4. Nenhuma ação adicional necessária" -ForegroundColor White
+        Write-Host "   2. Instalacao automatica e silenciosa executada" -ForegroundColor White
+        Write-Host "   3. Os aplicativos estao PRONTOS PARA USO" -ForegroundColor Green
+        Write-Host "   4. Nenhuma acao adicional necessaria" -ForegroundColor White
         Write-Host ""
-        Write-Host "📄 Log detalhado: $LogFile" -ForegroundColor Gray
+        Write-Host "Log detalhado: $LogFile" -ForegroundColor Gray
 
     } catch {
         Write-Host ""
-        Write-Host "💥 ERRO CRÍTICO: $($_.Exception.Message)" -ForegroundColor Red
-        Write-Log "ERRO CRÍTICO: $($_.Exception.Message)"
+        Write-Host "ERRO CRITICO: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Log "ERRO CRITICO: $($_.Exception.Message)"
     }
 }
 
