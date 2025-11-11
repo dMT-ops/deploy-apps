@@ -207,7 +207,7 @@ function Download-Applications {
             } catch {
                 Write-Host " ERRO" -ForegroundColor Red
                 Write-Host "      Erro: $($_.Exception.Message)" -ForegroundColor Red
-                Write-Log "ERRO no download do $($app.Name): $($_.Exception.Message)"
+                Write-Log "ERRO no download: $($app.Name)"
                 $downloadResults[$appKey] = $false
             }
         } else {
@@ -288,12 +288,12 @@ function Install-ApplicationsRemote {
                     Start-Sleep -Seconds 3
                 } else {
                     Write-Host " ERRO" -ForegroundColor Red
-                    Write-Log "ERRO na instalacao do $($app.Name) em $ComputerName - Codigo: $($result.ReturnValue)"
+                    Write-Log "ERRO na instalacao: $($app.Name) em $ComputerName"
                 }
             } catch {
                 Write-Host " ERRO" -ForegroundColor Red
-                Write-Host "            Erro: $($_.Exception.Message)" -ForegroundColor Red
-                Write-Log "ERRO na instalacao do $($app.Name) em $ComputerName: $($_.Exception.Message)"
+                Write-Host "            Falha na instalacao" -ForegroundColor Red
+                Write-Log "ERRO na instalacao: $($app.Name) em $ComputerName"
             }
         }
         
@@ -301,7 +301,7 @@ function Install-ApplicationsRemote {
         
         # Considerar sucesso se pelo menos uma instalação foi iniciada
         if ($installedCount -gt 0) {
-            Write-Log "SUCESSO: $installedCount/$($SelectedApps.Count) apps instalados/iniciados em $ComputerName"
+            Write-Log "SUCESSO: $installedCount apps instalados em $ComputerName"
             return $true
         } else {
             Write-Log "FALHA: Nenhum app instalado em $ComputerName"
@@ -310,7 +310,7 @@ function Install-ApplicationsRemote {
         
     } catch {
         Write-Host " ERRO" -ForegroundColor Red
-        Write-Log "ERRO na instalacao em $ComputerName : $($_.Exception.Message)"
+        Write-Log "ERRO na instalacao em $ComputerName"
         return $false
     }
 }
